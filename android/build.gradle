@@ -1,21 +1,60 @@
+// android/build.gradle
+
 buildscript {
     ext {
-        buildToolsVersion = "35.0.0"
+        // Mevcut ayarlarınız
+        buildToolsVersion = "35.0.0" // Bu genellikle doğrudan burada tanımlanmaz, app/build.gradle'da kullanılır.
         minSdkVersion = 24
-        compileSdkVersion = 35
-        targetSdkVersion = 35
-        ndkVersion = "27.1.12297006"
-        kotlinVersion = "2.0.21"
+        compileSdkVersion = 34 // React Native'in son sürümleri genellikle 34 kullanır, kontrol edin.
+        targetSdkVersion = 34 // compileSdkVersion ile aynı olmalı.
+        ndkVersion = "27.1.12297006" // Bu, React Native'in belirli bir sürümüyle uyumlu olmalı.
+        kotlinVersion = "2.0.21" // Bu sürümün projenizdeki diğer bağımlılıklarla uyumlu olduğundan emin olun.
+
+        // Firebase için EKLENMESİ GEREKENLER:
+        // @react-native-firebase için önerilen Google Services sürümü.
+        // En güncel sürümü Firebase veya @react-native-firebase dokümantasyonundan kontrol edebilirsiniz.
+        googleServicesVersion = "4.4.2" // Firebase dokümanlarındaki gibi veya daha günceli.
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle")
+        // Android Gradle Plugin sürümünü belirtmek iyi bir pratiktir.
+        // Projenizin kullandığı sürümü kontrol edin (örn: 8.2.2 veya React Native'in varsayılanı)
+        classpath("com.android.tools.build:gradle:8.2.2") // Örnek sürüm, projenize uygun olanı kullanın.
         classpath("com.facebook.react:react-native-gradle-plugin")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
+        // Kotlin Gradle Plugin sürümünü ext bloğundaki değişkenden alın.
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+
+        // Firebase için EKLENMESİ GEREKENLER:
+        // Google Services Gradle Plugin'ini ekleyin.
+        classpath("com.google.gms:google-services:$googleServicesVersion")
     }
 }
 
-apply plugin: "com.facebook.react.rootproject"
+// Bu kısım genellikle React Native projelerinde bu şekilde kalır.
+// Eğer allprojects bloğu yoksa veya farklıysa, @react-native-firebase dokümantasyonunu kontrol edin.
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        // React Native için gerekli diğer depolar
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url("$rootDir/../node_modules/react-native/android")
+        }
+        maven {
+            // Android JSC is installed from npm
+            url("$rootDir/../node_modules/jsc-android/dist")
+        }
+        // Diğer kütüphaneler için (örneğin jitpack)
+        // maven { url 'https://www.jitpack.io' }
+    }
+}
+
+// "apply plugin: "com.facebook.react.rootproject"" satırı genellikle
+// settings.gradle dosyasında bulunur veya React Native'in yeni sürümlerinde farklı yönetilir.
+// Eğer projeniz bu şekilde çalışıyorsa ve sorun yoksa değiştirmeyin.
+// Ancak, React Native'in standart şablonlarında bu satır genellikle burada olmaz.
+// apply plugin: "com.facebook.react.rootproject" // Bu satırın burada olması gerekmeyebilir, settings.gradle'ı kontrol edin.

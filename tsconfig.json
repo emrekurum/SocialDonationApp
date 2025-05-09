@@ -1,6 +1,8 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
   "compilerOptions": {
-    "types": ["react-native", "react-native-dotenv"]
+    "types": ["react-native", "react-native-dotenv"],
+    "typeRoots": ["./types", "./node_modules/@types"]
   }
+  
 }
